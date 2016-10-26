@@ -10,6 +10,11 @@ from sklearn import linear_model
 import numpy as np
 import statsmodels.formula.api as smf
 
+def log_loss_binary(actual, predicted, eps = 1e-15):
+    predicted = np.minimum(np.maximum(predicted, eps), 1 - eps)
+    
+    return -(sum(actual * np.log(predicted) + (1. - actual) * np.log(1. - predicted))) / len(actual)
+
 train = pd.read_csv('C:/Users/Luke/QUBHACKATHON/trainingData.csv') #You'll need to make these your own paths
 test = pd.read_csv('C:/Users/Luke/QUBHACKATHON/testingData.csv')
 
@@ -31,4 +36,6 @@ real = np.array(response.values)
 predicted = np.array(((est.predict(regressors)*2.0).round())*1.0/1.0)
 
 print np.average(real-predicted)
+print '\n'
+print log_loss_binary(real, predicted)
 
